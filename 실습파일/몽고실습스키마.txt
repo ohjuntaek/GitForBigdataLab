@@ -67,17 +67,9 @@ M
         Friends_id:"3"
 }
 {
-        "_id" : 3,
-        "UserId" : "ID3",
-        "UserPWD" : "PWD3",
-        "Email" : "ID3@gmail.com",
-        "ProfileImageUrl" : "https://image3.com",
-        "SecretGroup_id" : "S1",
-        "SecretId" : "SID3",
-        "SecretImageUrl" : "Secret3@gmail.com",
-        "Addresses": {Detail : "林家汲疙3", AddrStr:"林家瘤3",AddrTel:020000030}
-        "Feeds":{Content:"郴侩3",WritingTime:Date(),FeedImageUrl: ["https://image30.com","https://image302.com"]}
-        "Friends":{"User_id":4,"FriendsCategory":"模茄 模备"}
+        _id : "3",UserId : "ID3",UserPWD : "PWD3",Email : "ID3@gmail.com",ProfileImageUrl : "https://image3.com",SecretGroup_id : "S1", SecretId : "SID3",SecretImageUrl : "Secret3@gmail.com",    Addresses: {Detail : "林家汲疙3",AddrStr:"林家瘤3",AddrTel:"020000030"},
+        Feeds:{Content:"郴侩3",WritingTime:Date(),FeedImageUrl: "https://image30.com"},
+        Friends_id:{"User_id":"4","FriendsCategory":"模茄 模备"}
 }
 {
         "_id" : 4,
@@ -88,7 +80,7 @@ M
         "SecretGroup_id" : "S1",
         "SecretId" : "SID4",
         "SecretImageUrl" : "Secret4@gmail.com",
-        "Feeds":{Content:"郴侩4",WritingTime:Date(),FeedImageUrl: ["https://image40.com","https://image402.com"]}
+        "Feeds":{Content:"郴侩4",WritingTime:Date(),FeedImageUrl: ["https://image40.com","https://image402.com"]},
         "Friends":{"User_id":5,"FriendsCategory":"模茄 模备"}
 }
 {
@@ -100,7 +92,7 @@ M
         "SecretGroup_id" : "S1",
         "SecretId" : "SID5",
         "SecretImageUrl" : "Secret5@gmail.com",
-        "Feeds":{Content:"郴侩5",WritingTime:Date(),FeedImageUrl: ["https://image50.com","https://image502.com"]}
+        "Feeds":{Content:"郴侩5",WritingTime:Date(),FeedImageUrl: ["https://image50.com","https://image502.com"]},
         "Friends":{"User_id":1,"FriendsCategory":"模茄 模备"}
 }
 
