@@ -1,0 +1,107 @@
+*1,2,3
+{User(UserID, UserPWD,Email,ProfileImageUrl)}
+1
+:|:
+M
+{Address(Detail, AddStr, AddNum)}
+*4
+{User}-M-{Friends(SUserID(FK),OUserID(FK),FriendCategory}-M-{User}
+*5
+{User}-<{Feed(UserID(FK), Content(FK), WritingTime, FeedImageUrl(다중값)}
+*6 비밀그룹
+- 사용자가 있는데 그룹에 가입할수도 있고 그룹을 생성,관리할수도 있는데
+- 유저는 비밀그룹내에서만 사용할 수 있는 닉네임, 프로필사진을 따로 등록한다.. 이건가?
+{SecretGroup(GroupID(PK))-<User(...+SecretGroup(FK), CheckGroupConstructor, CheckGroupAdmin)
+------------------------------------
+1. SecretGroup : 1개 생성
+{SecretGroup(GroupID(PK))-<User(...+SecretGroup(FK), CheckGroupConstructor, CheckGroupAdmin, SecretGroupID, SecretImageUrl)
+1.1 User : 5명 생성
+{User(UserId, UserPwd,Email,ProfileImageUrl)}
+- ProfileImageUrl은 다 갖고 있음
+{User(...+SecretGroup(FK), CheckGroupConstructor, CheckGroupAdmin, SecretGroupID, SecretImageUrl)}
+- 그룹 생성자, 그룹관리자 여부 각각 한명씩
+- 나머지 3명 그룹 참여자 겠네
+
+1.1.1 Address 
+{Address(Detail, AddrStr, AddrTel,UserId(FK))}
+- 2명은 없고, 2명은 1개, 1명은 3개 등록
+- 1대M 이니까 걍 내장 도큐먼트? 쓰면댐
+
+!1.1.2 Friends
+{Friends(SUserID(FK),OUserID(FK),FriendCategory}
+- 4명은 친구1명, 1명은 친구 2명
+- 이거는 다대다라서.. 무슨 참조방식? 해봐야 알거같다
+- 이거는 콜렉션을 만들어야함..
+- 프랜즈그룹 1, 2해서 유저가 
+
+1.1.3 Feed
+{Feed(UserID(FK), Content, WritingTime, FeedImageUrl(다중값)}
+- 4명은 피드 1개, 1명은 피드 2개
+- 이거는 일대다니깐 걍 내장도큐먼트
+
+{ "_id" : 1, "UserId" : "ID1", "UserPWD" : "PWD1", "Email" : "ID1@gmail.com", "ProfileImageUrl" : "https://image1.com", "CheckGroupConstructor" : true, "SecretGroup_id" : "S1", "SecretId" : "SID1", "SecretImageUrl" : "Secret1@gmail.com" },
+{ "_id" : 2, "UserId" : "ID2", "UserPWD" : "PWD2", "Email" : "ID2@gmail.com", "ProfileImageUrl" : "https://image2.com", "CheckGroupAdmin" : true, "SecretGroup_id" : "S1", "SecretId" : "SID2", "SecretImageUrl" : "Secret2@gmail.com" },
+{ "_id" : 3, "UserId" : "ID3", "UserPWD" : "PWD3", "Email" : "ID3@gmail.com", "ProfileImageUrl" : "https://image3.com", "SecretGroup_id" : "S1", "SecretId" : "SID3", "SecretImageUrl" : "Secret3@gmail.com" },
+{ "_id" : 4, "UserId" : "ID4", "UserPWD" : "PWD4", "Email" : "ID4@gmail.com", "ProfileImageUrl" : "https://image4.com", "SecretGroup_id" : "S1", "SecretId" : "SID4", "SecretImageUrl" : "Secret4@gmail.com" },
+{ "_id" : 5, "UserId" : "ID5", "UserPWD" : "PWD5", "Email" : "ID5gmail.com", "ProfileImageUrl" : "https://image5.com", "SecretGroup_id" : "S1", "SecretId" : "SID5", "SecretImageUrl" : "Secret5@gmail.com" }
+
+-------------Address, Feed 추가
+{
+        "_id" : 1,
+        "UserId" : "ID1",
+        "UserPWD" : "PWD1",
+        "Email" : "ID1@gmail.com",
+        "ProfileImageUrl" : "https://image1.com",
+        "CheckGroupConstructor" : true,
+        "SecretGroup_id" : "S1",
+        "SecretId" : "SID1",
+        "SecretImageUrl" : "Secret1@gmail.com",
+        "Addresses": [{Detail : "주소설명1-1", AddrStr:"주소지1-1",AddrTel:020000011}, {Detail : "주소설명1-2", AddrStr:"주소지1-2",AddrTel:020000012}, {Detail : "주소설명1-3", AddrStr:"주소지1-3",AddrTel:020000013}],
+        "Feeds":[{Content:"내용1-1",WritingTime:Date(),FeedImageUrl: ["https://image11.com","https://image111.com"]},{Content:"내용2",WritingTime:Date(),FeedImageUrl: ["https://image12.com","https://image122.com"]}],
+        "Friends":[{"User_id":"2","FriendsCategory":"가족"},{"User_id":"3",""FriendsCategory":"친한 친구"}]
+}
+ db.User.updateOne({_id:"2"},
+{
+        _id : "2",UserId : "ID2",UserPWD : "PWD2",Email : "ID2@gmail.com",ProfileImageUrl : "https://image2.com",CheckGroupAdmin : true,SecretGroup_id : "S1", SecretId : "SID2",SecretImageUrl : "Secret2@gmail.com",    Addresses: {Detail : "주소설명2",AddrStr:"주소지2",AddrTel:"020000020"},
+        Feeds:{Content:"내용2",WritingTime:"123",FeedImageUrl: "https://image20.com"},
+        Friends_id:"3"
+}
+{
+        "_id" : 3,
+        "UserId" : "ID3",
+        "UserPWD" : "PWD3",
+        "Email" : "ID3@gmail.com",
+        "ProfileImageUrl" : "https://image3.com",
+        "SecretGroup_id" : "S1",
+        "SecretId" : "SID3",
+        "SecretImageUrl" : "Secret3@gmail.com",
+        "Addresses": {Detail : "주소설명3", AddrStr:"주소지3",AddrTel:020000030}
+        "Feeds":{Content:"내용3",WritingTime:Date(),FeedImageUrl: ["https://image30.com","https://image302.com"]}
+        "Friends":{"User_id":4,"FriendsCategory":"친한 친구"}
+}
+{
+        "_id" : 4,
+        "UserId" : "ID4",
+        "UserPWD" : "PWD4",
+        "Email" : "ID4@gmail.com",
+        "ProfileImageUrl" : "https://image4.com",
+        "SecretGroup_id" : "S1",
+        "SecretId" : "SID4",
+        "SecretImageUrl" : "Secret4@gmail.com",
+        "Feeds":{Content:"내용4",WritingTime:Date(),FeedImageUrl: ["https://image40.com","https://image402.com"]}
+        "Friends":{"User_id":5,"FriendsCategory":"친한 친구"}
+}
+{
+        "_id" : 5,
+        "UserId" : "ID5",
+        "UserPWD" : "PWD5",
+        "Email" : "ID5gmail.com",
+        "ProfileImageUrl" : "https://image5.com",
+        "SecretGroup_id" : "S1",
+        "SecretId" : "SID5",
+        "SecretImageUrl" : "Secret5@gmail.com",
+        "Feeds":{Content:"내용5",WritingTime:Date(),FeedImageUrl: ["https://image50.com","https://image502.com"]}
+        "Friends":{"User_id":1,"FriendsCategory":"친한 친구"}
+}
+
+
